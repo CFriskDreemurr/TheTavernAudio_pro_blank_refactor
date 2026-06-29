@@ -119,22 +119,22 @@ public class spell_cast_new : MonoBehaviour
 
     void HandleChargingState()
     {
-        if (Input.GetMouseButton(0))
-        {
-            chargeTimer += Time.deltaTime;
-            FollowSpawnPoint();
-            float t = Mathf.Clamp01(chargeTimer / chargeTime);
-            scaleValue = chargeCurve.Evaluate(t);
-            UpdateChargingVfx(t);
+        if (Input.GetMouseButtonDown(1))
+        {
+            CancelSpell();
 
-            if (chargeTimer >= chargeTime && currentState != SpellState.Holding)
-            {
-                currentState = SpellState.Holding;
-                SetFullyChargedVfx();
-            }
-        }
+            // --- LOGIKA AUDIO: Anulowanie PPM ---
+            if (isAudioInitialized)
+            {
+                audioSystem.SpellCancel();
+                // USUNIĘTO: audioSystem.SpellRelease();
+            }
 
-        if (Input.GetMouseButtonUp(0))
+            chargeTimer = 0f;
+            currentState = SpellState.Idle;
+        }
+
+        if (Input.GetMouseButtonUp(0))
         {
             if (chargeTimer >= chargeTime)
             {
@@ -165,7 +165,6 @@ public class spell_cast_new : MonoBehaviour
             if (isAudioInitialized)
             {
                 audioSystem.SpellCancel(); 
-                audioSystem.SpellRelease();
             }
                 
             
@@ -179,19 +178,23 @@ public class spell_cast_new : MonoBehaviour
         FollowSpawnPoint();
         scaleValue = 1f;
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            FireSpell("released during HOLDING");
-            
-            // --- LOGIKA AUDIO: ZATRZYMANIE DŹWIĘKU ---
-            if (isAudioInitialized)
-                audioSystem.SpellRelease();
-            
-            chargeTimer = 0f;
-            currentState = SpellState.Idle;
-        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            // ANULOWANIE 2: Naciśnięcie PPM z naładowanym zaklęciem
+            CancelSpell();
 
-        if (Input.GetMouseButtonDown(1))
+            // --- LOGIKA AUDIO: Anulowanie PPM ---
+            if (isAudioInitialized)
+            {
+                audioSystem.SpellCancel();
+                // USUNIĘTO: audioSystem.SpellRelease();
+            }
+
+            chargeTimer = 0f;
+            currentState = SpellState.Idle;
+        }
+
+        if (Input.GetMouseButtonDown(1))
         {
             // ANULOWANIE 2: Naciśnięcie PPM z naładowanym zaklęciem
             CancelSpell();
@@ -199,8 +202,7 @@ public class spell_cast_new : MonoBehaviour
             // --- LOGIKA AUDIO: Anulowanie PPM (poprawka logiki) ---
             if (isAudioInitialized)
             {
-                audioSystem.SpellCancel(); 
-                audioSystem.SpellRelease();
+                audioSystem.SpellCancel();
             }
 
             chargeTimer = 0f;

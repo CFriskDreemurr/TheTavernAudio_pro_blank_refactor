@@ -3300,11 +3300,11 @@ MonoBehaviour:
     Path: event:/Footsteps/Land
   spellEvent:
     Guid:
-      Data1: 1292920493
-      Data2: 1279219833
-      Data3: 101617297
-      Data4: -1111931844
-    Path: event:/MegaloAudio
+      Data1: -1114450533
+      Data2: 1147295676
+      Data3: -1115754567
+      Data4: -1430236797
+    Path: event:/ActualAudio
   spellImpactEvent:
     Guid:
       Data1: 0
